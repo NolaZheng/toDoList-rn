@@ -16,6 +16,7 @@ import Input from './components/Input'
 
 export default function App() {
   const [newTODO, setNewTODO] = useState([])
+  const [addMode, setAddMode] = useState(false)
 
   const addTodoHandler = enteredInput => {
     setNewTODO(currentList => [
@@ -25,6 +26,8 @@ export default function App() {
         value: enteredInput,
       },
     ])
+
+    setAddMode(false)
   }
 
   const removeTodoHandler = toDoId => {
@@ -35,7 +38,12 @@ export default function App() {
 
   return (
     <View style={styles.screen}>
-      <Input onAddTodo={addTodoHandler} />
+      <Button title="Add New TODO" onPress={() => setAddMode(true)} />
+      <Input
+        onAddTodo={addTodoHandler}
+        visible={addMode}
+        closeModal={() => setAddMode(false)}
+      />
       <FlatList
         data={newTODO}
         renderItem={todo => (

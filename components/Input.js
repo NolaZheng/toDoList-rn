@@ -1,28 +1,37 @@
 import React, { useState } from 'react'
-import { View, TextInput, StyleSheet, Button } from 'react-native'
+import { View, TextInput, StyleSheet, Button, Modal } from 'react-native'
 
-const Input = (props) => {
+const Input = props => {
   const [enteredInput, setInput] = useState('')
-  const inputHandler = (enterText) => {
+  const inputHandler = enterText => {
     setInput(enterText)
   }
+  const addTodoHandler = () => {
+    props.onAddTodo(enteredInput)
+    setInput('')
+  }
   return (
-    <View style={styles.inputContainer}>
-      <TextInput
-        placeholder="Enter New TODO"
-        style={styles.input}
-        onChangeText={(value) => inputHandler(value)}
-      />
-      <Button title="ADD" onPress={props.onAddTodo.bind(this, enteredInput)} />
-    </View>
+    <Modal visible={props.visible} animationType="slide">
+      <View style={styles.inputContainer}>
+        <TextInput
+          placeholder="Enter New TODO"
+          style={styles.input}
+          onChangeText={value => inputHandler(value)}
+        />
+        <View style={styles.btnContainer}>
+          <Button title="CANCEL" color="red" onPress={props.closeModal} />
+          <Button title="ADD" onPress={addTodoHandler} />
+        </View>
+      </View>
+    </Modal>
   )
 }
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flexDirection: 'row',
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   input: {
     width: '80%',
@@ -30,6 +39,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     marginVertical: 10,
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '50%',
   },
 })
 
